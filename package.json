@@ -1,0 +1,7 @@
+{
+  "name": "bot-whatsapp",
+  "version": "1.0.0",
+  "description": "Bot WhatsApp",
+  "main": "index.js",
+  "dependencies": {}
+}

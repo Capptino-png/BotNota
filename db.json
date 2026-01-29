@@ -1,0 +1,252 @@
+{
+  "messages": {
+    "processed": [
+      "108F2126DB9F40AB997FE9A31FC401CB",
+      "312F3E6AEB9BAE5729DC132E7D91754B",
+      "28573FD9A8B8D87138FAB5BDC8475D78"
+    ]
+  },
+  "groups": {
+    "data": {
+      "temp-EqYDnVOPdnP0fIjU3GDLGC": {
+        "inviteCode": "EqYDnVOPdnP0fIjU3GDLGC"
+      },
+      "120363401575052804@g.us": {
+        "propostaAceita": true,
+        "dataAceite": "2025-08-17T02:29:36.449Z"
+      },
+      "120363028960746195@g.us": {
+        "inviteCode": "desconhecido",
+        "status": "aprovado",
+        "notificacaoFinalizada": true,
+        "adminsNotificados": {}
+      },
+      "120363403649564673@g.us": {
+        "inviteCode": "desconhecido",
+        "status": "aprovado",
+        "notificacaoFinalizada": true,
+        "adminsNotificados": {}
+      },
+      "120363418412122233@g.us": {
+        "inviteCode": "desconhecido",
+        "status": "aprovado",
+        "notificacaoFinalizada": false,
+        "adminsNotificados": {}
+      },
+      "120363400578063678@g.us": {
+        "inviteCode": "desconhecido",
+        "status": "aprovado",
+        "notificacaoFinalizada": false,
+        "adminsNotificados": {}
+      },
+      "120363419015616543@g.us": {
+        "inviteCode": "desconhecido",
+        "status": "aprovado",
+        "notificacaoFinalizada": true,
+        "adminsNotificados": {}
+      },
+      "120363319449504972@g.us": {
+        "inviteCode": "desconhecido",
+        "status": "aprovado",
+        "notificacaoFinalizada": true,
+        "adminsNotificados": {}
+      },
+      "120363400401783692@g.us": {
+        "inviteCode": "desconhecido",
+        "status": "aprovado",
+        "notificacaoFinalizada": true,
+        "adminsNotificados": {}
+      },
+      "120363420092092970@g.us": {
+        "inviteCode": "desconhecido",
+        "status": "aprovado",
+        "notificacaoFinalizada": true,
+        "adminsNotificados": {}
+      },
+      "120363399796305708@g.us": {
+        "inviteCode": "DtWhVTDsmiw6E1sJTHv6Gd",
+        "status": "aprovado"
+      }
+    }
+  },
+  "pendentes": {
+    "120363419136534834@g.us": {
+      "inviteCode": "IP8pGiH2gj79aMqLzPHi0H",
+      "status": "aguardando_aprovacao"
+    },
+    "120363420768830937@g.us": {
+      "inviteCode": "LE1i7ggtkhr5F28JkUYYUu",
+      "status": "aguardando_aprovacao"
+    }
+  },
+  "propostas": {
+    "120363401575052804@g.us": {
+      "5511948808735@s.whatsapp.net": {
+        "status": "aceita",
+        "dataAceite": "2025-08-17T02:29:41.984Z"
+      }
+    },
+    "120363028960746195@g.us": {
+      "5516991865426@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:00:04.579Z"
+      },
+      "555596464714@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:00:23.802Z"
+      },
+      "558196661417@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:00:36.188Z"
+      },
+      "559891073528@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:00:47.525Z"
+      },
+      "558191856953@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:01:01.327Z"
+      },
+      "553599126511@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:01:18.450Z"
+      },
+      "559887318939@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:01:33.093Z"
+      },
+      "5515998503874@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:01:51.461Z"
+      },
+      "559888049450@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:02:08.729Z"
+      }
+    },
+    "120363403649564673@g.us": {
+      "557481470613@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:02:12.576Z"
+      },
+      "558194616996@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:02:19.756Z"
+      },
+      "558179037355@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:02:34.494Z"
+      },
+      "5524992707286@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:02:44.043Z"
+      },
+      "557799936409@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:02:55.993Z"
+      },
+      "5585921616029@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:03:14.097Z"
+      }
+    },
+    "120363419015616543@g.us": {
+      "5512982680055@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:03:40.106Z"
+      },
+      "558699404174@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:03:47.786Z"
+      },
+      "558189753948@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:03:58.589Z"
+      }
+    },
+    "120363319449504972@g.us": {
+      "558585326910@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:04:44.084Z"
+      }
+    },
+    "120363400401783692@g.us": {
+      "5512997546006@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:09:46.773Z"
+      },
+      "557781462649@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:09:57.151Z"
+      },
+      "556791108419@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:10:08.198Z"
+      },
+      "557791588275@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:10:21.884Z"
+      },
+      "558184884306@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:10:40.785Z"
+      },
+      "554999960367@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:11:02.822Z"
+      }
+    },
+    "120363420092092970@g.us": {
+      "5511996187192@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:10:23.286Z"
+      },
+      "5511989389534@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:10:32.229Z"
+      },
+      "5511995240025@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:10:42.883Z"
+      },
+      "5511934046921@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:10:54.056Z"
+      },
+      "5511916138270@s.whatsapp.net": {
+        "status": "enviada",
+        "tentativas": 1,
+        "dataEnvio": "2025-08-19T21:11:09.483Z"
+      }
+    }
+  }
+}
