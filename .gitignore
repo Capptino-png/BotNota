@@ -2,3 +2,14 @@ node_modules/
 auth_info_baileys/
 *.session
 *.log
+
+# Segredos/estado local: nao remove arquivos ja versionados
+.env
+.env.*
+!.env.example
+*.p12
+*.pfx
+*.pem
+*.key
+arquivos/database/qr-code/
+arquivos/database/queens/
