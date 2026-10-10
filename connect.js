@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 const { 'default': makeWASocket, useMultiFileAuthState, makeInMemoryStore, DisconnectReason, WAGroupMetadata, relayWAMessage, MediaPathMap, mentionedJid, processTime, MediaType, MessageType, Presence, Mimetype, Browsers, delay, fetchLatestBaileysVersion, MessageRetryMap, extractGroupMetadata, generateWAMessageFromContent, proto, otherOpts, makeCacheableSignalKeyStore, PHONENUMBER_MCC, isJidNewsletter, isJidBroadcast, isJidStatusBroadcast } = require('@fadzzzslebew/baileys');
 
 const { LoggerB, Boom, AssemblyAI, axios, fs, cheerio, crypto, util, randomBytes, emoji, P, NodeCache, linkfy, request, ms, FileType, os, ffmpeg, fetch, exec, spawn, moment, colors, readline, execSync } = require('./exports.js');
@@ -14,6 +12,27 @@ const { extractAcronymFromCity, DLT_FL, getFileBuffer, shuffle, sleep, sendPoll,
 
 var qrcode = "./arquivos/database/qr-code";
 const usePairingCode = process.argv.includes('sim');
+const { classifyDisconnect, retryDelay } = require('./core/connection-policy');
+let cachedNumber=null;
+let generation=0;
+let attempts=0;
+let retryTimer=null;
+function scheduleReconnect(mine,code,message) {
+ if(mine!==generation || retryTimer) return;
+ const state=classifyDisconnect(code,message);
+ console.log('Conexao encerrada ['+(code||'?')+']: '+state.type);
+ if(!state.retry || attempts>=5) {
+   console.error('Reconexao interrompida; credenciais preservadas. Confira biblioteca e rede.');
+   rl.close(); process.exit(1);
+ }
+ attempts++;
+ const ms=retryDelay(state.type,attempts);
+ console.log('Tentativa '+attempts+'/5 em '+(ms/1000)+'s');
+ retryTimer=setTimeout(() => {
+   retryTimer=null;
+   startConnect().catch(e => { console.error('Erro na reconexao:',e.message); process.exit(1); });
+ },ms);
+}
 
 if(!usePairingCode && !fs.existsSync(`${qrcode}/creds.json`)) console.log(colors.yellow("- Aviso: Se voce nao estiver outro aparelho em maos para realizar a leitura do qr-code, voce usar a 2 opcao seria ela ( sh start.sh sim ), sem os parenteses e voce conectara com codigo de emparelhamento.\n") + "–");
 
@@ -35,6 +54,9 @@ const question = (text) => new Promise((resolve) => rl.question(text, resolve));
 const msgRetryCounterCache = new NodeCache();
 
 async function startConnect() {
+ const mine=++generation;
+ let closed=false;
+ let requested=false;
     const { state, saveCreds } = await useMultiFileAuthState(qrcode);
     const { version, isLatest } = await fetchLatestBaileysVersion();
 
@@ -44,25 +66,15 @@ async function startConnect() {
         return msg ? msg.message : undefined;
     }
 
-    let pairingNumber = null;
+    let pairingNumber=cachedNumber;
     if(usePairingCode && !state.creds.registered) {
-        console.log('\n=== CONFIGURACAO DE PAREAMENTO ===\n');
-        const phoneNumber = await question("Digite seu numero (com DDD, ex: 13982189399): ");
-        
-        if (!phoneNumber) {
-            console.log('ERRO: Numero de telefone invalido!');
-            process.exit(0);
-        }
-        
-        pairingNumber = collectNumbers(phoneNumber);
-        
-        if (pairingNumber.length < 10) {
-            console.log('ERRO: Numero muito curto! Use: DDD + numero (min. 10 digitos)');
-            process.exit(0);
-        }
-        
-        console.log(`OK: Numero configurado: ${pairingNumber}`);
-        console.log('Preparando conexao...\n');
+      if(!pairingNumber) {
+        const digits=collectNumbers(await question('Numero com codigo do pais e DDD (ex: 5513982189399): '));
+        pairingNumber=(digits.length===10 || digits.length===11) ? '55'+digits : digits;
+        if(!/^[0-9]{12,15}$/.test(pairingNumber)) throw new Error('Numero invalido; use codigo do pais + DDD + telefone.');
+        cachedNumber=pairingNumber;
+      }
+      console.log('Aguardando readiness/QR do socket...');
     }
 
     const yurizin = makeWASocket({
@@ -88,74 +100,37 @@ async function startConnect() {
         msgRetryCounterCache
     });
 
-    if (usePairingCode && !state.creds.registered && pairingNumber) {
-        let codeRequested = false;
-        setTimeout(async () => {
-            if (!yurizin.authState.creds.registered && !codeRequested) {
-                codeRequested = true;
-                try {
-                    console.log('Solicitando codigo de pareamento...\n');
-                    const code = await yurizin.requestPairingCode(pairingNumber);
-                    console.log('===================================');
-                    console.log('     CODIGO:', code);
-                    console.log('===================================\n');
-                    console.log('INSTRUCOES:');
-                    console.log('1. Abra o WhatsApp no celular');
-                    console.log('2. Toque em "Aparelhos conectados"');
-                    console.log('3. Toque em "Conectar aparelho"');
-                    console.log('4. Digite o codigo acima');
-                    console.log('Voce tem 60 segundos!\n');
-                } catch (error) {
-                    console.log('ERRO ao solicitar codigo:', error.message);
-                    if (error.message.includes('not-authorized')) {
-                        console.log('DICA: Tente limpar a pasta qr-code e executar novamente');
-                    }
-                    process.exit(1);
-                }
-            }
-        }, 3000);
+    async function pairingReady() {
+      if(closed || mine!==generation || requested || !usePairingCode || !pairingNumber || state.creds.registered) return;
+      requested=true;
+      try {
+        console.log('Solicitando codigo apos readiness...');
+        const code=await yurizin.requestPairingCode(pairingNumber);
+        if(mine===generation && !closed) console.log('CODIGO: '+code);
+      } catch(error) {
+        console.error('Falha ao solicitar codigo:',error.message);
+        closed=true;
+        try { yurizin.end(new Error('pairing failed')); } catch (_) {}
+        scheduleReconnect(mine,405,error.message);
+      }
     }
-
     yurizin.ev.process(async(events) => {
         if(events["connection.update"]) {
             const update = events["connection.update"];
             const { connection, lastDisconnect, isNewLogin, qr } = update;
-            const shouldReconnect = new Boom(lastDisconnect?.error)?.output?.statusCode;
+            if(mine!==generation) return;
+            const shouldReconnect=lastDisconnect?.error?.output?.statusCode || new Boom(lastDisconnect?.error)?.output?.statusCode;
+            if(qr && connection!=='close') await pairingReady();
 
             if (isNewLogin) {
-                console.log('\nCodigo confirmado! Pareamento aceito!');
-                console.log('Finalizando configuracao...');
+                console.log('Credenciais atualizadas; aguardando connection=open...');
             }
 
             switch (connection) {
                 case 'close':
-                    if(shouldReconnect) {
-                        if(shouldReconnect == 401) {
-                            console.log("ERRO: Sessao invalidada. Limpando dados...");
-                            try { 
-                                await fs.emptyDir(qrcode); 
-                                await fs.remove(qrcode); 
-                            } catch(e) {}
-                            console.log("Execute novamente: sh start.sh sim");
-                            process.exit(0);
-                        } else if(shouldReconnect == 408) {
-                            console.log("Timeout. Reconectando...");
-                            setTimeout(() => startConnect(), 3000);
-                        } else if(shouldReconnect == 428) {
-                            console.log("Conexao perdida. Reconectando...");
-                            setTimeout(() => startConnect(), 3000);
-                        } else if(shouldReconnect == 440) {
-                            console.log("ERRO: Codigo expirou! Execute novamente.");
-                            try { 
-                                await fs.emptyDir(qrcode); 
-                                await fs.remove(qrcode); 
-                            } catch(e) {}
-                            process.exit(0);
-                        } else {
-                            console.log(`Conexao fechada [${shouldReconnect}]:`, lastDisconnect?.error?.message || 'Erro desconhecido');
-                            setTimeout(() => startConnect(), 5000);
-                        }
-                    }
+                    if(closed) break;
+                    closed=true;
+                    scheduleReconnect(mine,shouldReconnect,lastDisconnect?.error?.message);
                     break;
 
                 case 'connecting':
@@ -169,6 +144,8 @@ async function startConnect() {
                     break;
 
                 case 'open':
+                    attempts=0;
+                    cachedNumber=null;
                     console.log('\n===================================');
                     console.log('   BOT ONLINE E FUNCIONANDO!');
                     console.log('===================================\n');
