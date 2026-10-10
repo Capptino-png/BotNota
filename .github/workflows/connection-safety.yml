@@ -1,0 +1,21 @@
+name: BotNota connection safety
+on:
+  pull_request:
+  push:
+    branches:
+      - feat/termux-connection-hivemind-pattern
+jobs:
+  connection-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JS syntax
+        run: |
+          node --check connect.js
+          node --check core/connection-policy.js
+          node --check scripts/apply-termux-connection-patch.js
+      - name: Run pure tests
+        run: node --test tests/connection-policy.test.cjs
