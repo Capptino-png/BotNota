@@ -87,7 +87,7 @@ if (require.main===module) {
  const fs=require('fs'),path=require('path'),cp=require('child_process');
  const root=path.resolve(process.argv[2]||process.cwd());
  const file=path.join(root,'connect.js'), target=path.join(root,'core','connection-policy.js');
- const template=path.resolve(__dirname,'..','core','connection-policy.js'), temp=file+'.hive-next';
+ const template=path.resolve(__dirname,'..','core','connection-policy.js'), temp=file+'.hive-next.js';
  try {
   if(!fs.existsSync(template)) throw new Error('Falta core/connection-policy.js junto do instalador.');
   if(fs.existsSync(target) && fs.readFileSync(target,'utf8')!==fs.readFileSync(template,'utf8')) throw new Error('Modulo core diferente: nao sobrescrevi.');
