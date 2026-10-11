@@ -1,0 +1,21 @@
+name: System dispatcher repair tests
+on:
+  push:
+    branches: [fix/termux-system-command-dispatch]
+  pull_request:
+    paths:
+      - 'scripts/repair-system-dispatch.js'
+      - 'tests/repair-system-dispatch.test.cjs'
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['22', '24']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: node --check scripts/repair-system-dispatch.js
+      - run: node --test tests/repair-system-dispatch.test.cjs
