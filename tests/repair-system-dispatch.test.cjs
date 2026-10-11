@@ -59,3 +59,13 @@ test('modulo de texto compila e suporta encapsulamentos comuns', () => {
 test('recusa wrapper ambiguo', () => {
   assert.throws(()=>repairIndex(fixture.replace('/* ----- [ Detectar alterações e salvar ] ----- */','/* marker desconhecido */')),/fechamento diferente/);
 });
+
+test('transformacao compila sobre o index.js real do repositorio', () => {
+  const fs = require('fs');
+  if (!fs.existsSync('./index.js')) return;
+  const original = fs.readFileSync('./index.js', 'utf8');
+  const result = repairIndex(original);
+  assert.ok(result.source.includes('const resolvedPrefix ='));
+  assert.ok(result.source.includes('async function startyurizin(upsert, yurizin, qrcode)'));
+  syntaxCheck(result.source, 'full-index-real');
+});
